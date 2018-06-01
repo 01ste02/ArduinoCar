@@ -76,7 +76,7 @@ void driveForward(int duration) {
   analogWrite(pwm_a, 255);  
   analogWrite(pwm_b, 255);
   delay(duration);
-  stopCar();
+  //stopCar();
 }
 
 void driveReverse(int duration) {
