@@ -3,24 +3,24 @@
 
 long duration, distance;
 
-int pwm_a = 3;  //PWM control for motor outputs 1 and 2 
-int pwm_b = 9;  //PWM control for motor outputs 3 and 4 
-int dir_a = 2;  //direction control for motor outputs 1 and 2 
-int dir_b = 8;  //direction control for motor outputs 3 and 4 
+int pwm_a = 3;  //PWM control for motor outputs 1 and 2
+int pwm_b = 9;  //PWM control for motor outputs 3 and 4
+int dir_a = 2;  //direction control for motor outputs 1 and 2
+int dir_b = 8;  //direction control for motor outputs 3 and 4
 
-int leftDelay = 150;
-int rightDelay = 150;
+int leftDelay = 415;
+int rightDelay = 415;
 int rotateDelay = 2 * rightDelay;
 
 
 void setup() {
   //Serial.begin(9600);
-  
+
   pinMode(pwm_a, OUTPUT);  //Set control pins to be outputs
   pinMode(pwm_b, OUTPUT);
   pinMode(dir_a, OUTPUT);
   pinMode(dir_b, OUTPUT);
-  
+
   analogWrite(pwm_a, 100);  //set both motors to run at (100/255 = 39)% duty cycle (slow)
   analogWrite(pwm_b, 100);
 
@@ -29,9 +29,9 @@ void setup() {
 }
 
 void loop() {
-//  turnRight();
-//  //driveForward(250);
-//  delay(1000);
+  //turnLeft();
+  //driveForward(250);
+  //delay(1000);
   checkSensors();
   //Serial.println(distance);
   while (distance > 10) {
@@ -43,47 +43,47 @@ void loop() {
   if (distance < 10) {
     Serial.println("Turn");
     turnRight();
-    eStop();
+    //  eStop();
   }
 }
 
 void turnLeft() {
-  digitalWrite(dir_a, HIGH); 
-  digitalWrite(dir_b, LOW);  
-  
-  analogWrite(pwm_a, 70);  
-  analogWrite(pwm_b, 70);
+  digitalWrite(dir_a, HIGH);
+  digitalWrite(dir_b, LOW);
+
+  analogWrite(pwm_a, 100);
+  analogWrite(pwm_b, 100);
 
   delay(leftDelay);
   stopCarLeft();
 }
 
 void turnRight() {
-  digitalWrite(dir_a, LOW); 
-  digitalWrite(dir_b, HIGH);  
-  
-  analogWrite(pwm_a, 70);  
-  analogWrite(pwm_b, 70);
+  digitalWrite(dir_a, LOW);
+  digitalWrite(dir_b, HIGH);
+
+  analogWrite(pwm_a, 100);
+  analogWrite(pwm_b, 100);
 
   delay(rightDelay);
   stopCarRight();
 }
 
 void driveForward(int duration) {
-  digitalWrite(dir_a, LOW); 
-  digitalWrite(dir_b, LOW);  
-  
-  analogWrite(pwm_a, 150);  
+  digitalWrite(dir_a, LOW);
+  digitalWrite(dir_b, LOW);
+
+  analogWrite(pwm_a, 150);
   analogWrite(pwm_b, 150);
   delay(duration);
   //stopCar();
 }
 
 void driveReverse(int duration) {
-  digitalWrite(dir_a, HIGH); 
-  digitalWrite(dir_b, HIGH);  
-  
-  analogWrite(pwm_a, 150);  
+  digitalWrite(dir_a, HIGH);
+  digitalWrite(dir_b, HIGH);
+
+  analogWrite(pwm_a, 150);
   analogWrite(pwm_b, 150);
 
   delay(duration);
@@ -91,10 +91,10 @@ void driveReverse(int duration) {
 }
 
 void turnAround() {
-  digitalWrite(dir_a, LOW); 
-  digitalWrite(dir_b, HIGH);  
-  
-  analogWrite(pwm_a, 70);  
+  digitalWrite(dir_a, LOW);
+  digitalWrite(dir_b, HIGH);
+
+  analogWrite(pwm_a, 70);
   analogWrite(pwm_b, 70);
 
   delay(rotateDelay);
@@ -103,70 +103,70 @@ void turnAround() {
 }
 
 void stopCar() {
-  digitalWrite(dir_a, HIGH); 
-  digitalWrite(dir_b, HIGH);  
-  
-  analogWrite(pwm_a, 100);  
+  digitalWrite(dir_a, HIGH);
+  digitalWrite(dir_b, HIGH);
+
+  analogWrite(pwm_a, 100);
   analogWrite(pwm_b, 100);
 
   delay(15);
-  analogWrite(pwm_a, 0);  
+  analogWrite(pwm_a, 0);
   analogWrite(pwm_b, 0);
 }
 
 void stopCarLeft() {
-  digitalWrite(dir_a, LOW); 
-  digitalWrite(dir_b, HIGH);  
-  
-  analogWrite(pwm_a, 40);  
-  analogWrite(pwm_b, 40);
+  digitalWrite(dir_a, LOW);
+  digitalWrite(dir_b, HIGH);
 
-  delay(15);
+  analogWrite(pwm_a, 90);
+  analogWrite(pwm_b, 90);
 
-  analogWrite(pwm_a, 0);  
+  delay(150);
+
+  analogWrite(pwm_a, 0);
   analogWrite(pwm_b, 0);
 }
 
 void stopCarRight() {
-  digitalWrite(dir_a, HIGH); 
-  digitalWrite(dir_b, LOW);  
-  
-  analogWrite(pwm_a, 40);  
-  analogWrite(pwm_b, 40);
+  digitalWrite(dir_a, HIGH);
+  digitalWrite(dir_b, LOW);
 
-  delay(15);
+  analogWrite(pwm_a, 90);
+  analogWrite(pwm_b, 90);
 
-  analogWrite(pwm_a, 0);  
+  delay(150);
+
+  analogWrite(pwm_a, 0);
   analogWrite(pwm_b, 0);
 }
 
 void eStop() {
-  digitalWrite(dir_a, HIGH); 
-  digitalWrite(dir_b, HIGH);  
-  
-  analogWrite(pwm_a, 100);  
+  digitalWrite(dir_a, HIGH);
+  digitalWrite(dir_b, HIGH);
+
+  analogWrite(pwm_a, 100);
   analogWrite(pwm_b, 100);
 
   delay(15);
 
-  analogWrite(pwm_a, 0);  
+  analogWrite(pwm_a, 0);
   analogWrite(pwm_b, 0);
-  
+
 }
 
 void checkSensors() {
   digitalWrite(trigPin, LOW);
   delayMicroseconds(2);
-  
+
   digitalWrite(trigPin, HIGH);
   delayMicroseconds(10);
-  
+
   digitalWrite(trigPin, LOW);
-  
+
   duration = pulseIn(echoPin, HIGH);
   if (duration > 5820) {
     duration = 5820;
   }
-  distance = (duration/2) / 29.1;
+  distance = (duration / 2) / 29.1;
 }
 
