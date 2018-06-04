@@ -51,8 +51,8 @@ void turnLeft() {
   digitalWrite(dir_a, HIGH); 
   digitalWrite(dir_b, LOW);  
   
-  analogWrite(pwm_a, 255);  
-  analogWrite(pwm_b, 255);
+  analogWrite(pwm_a, 70);  
+  analogWrite(pwm_b, 70);
 
   delay(leftDelay);
   stopCarLeft();
@@ -62,8 +62,8 @@ void turnRight() {
   digitalWrite(dir_a, LOW); 
   digitalWrite(dir_b, HIGH);  
   
-  analogWrite(pwm_a, 255);  
-  analogWrite(pwm_b, 255);
+  analogWrite(pwm_a, 70);  
+  analogWrite(pwm_b, 70);
 
   delay(rightDelay);
   stopCarRight();
@@ -73,8 +73,8 @@ void driveForward(int duration) {
   digitalWrite(dir_a, LOW); 
   digitalWrite(dir_b, LOW);  
   
-  analogWrite(pwm_a, 255);  
-  analogWrite(pwm_b, 255);
+  analogWrite(pwm_a, 150);  
+  analogWrite(pwm_b, 150);
   delay(duration);
   //stopCar();
 }
@@ -83,8 +83,8 @@ void driveReverse(int duration) {
   digitalWrite(dir_a, HIGH); 
   digitalWrite(dir_b, HIGH);  
   
-  analogWrite(pwm_a, 255);  
-  analogWrite(pwm_b, 255);
+  analogWrite(pwm_a, 150);  
+  analogWrite(pwm_b, 150);
 
   delay(duration);
   stopCar();
@@ -94,8 +94,8 @@ void turnAround() {
   digitalWrite(dir_a, LOW); 
   digitalWrite(dir_b, HIGH);  
   
-  analogWrite(pwm_a, 255);  
-  analogWrite(pwm_b, 255);
+  analogWrite(pwm_a, 70);  
+  analogWrite(pwm_b, 70);
 
   delay(rotateDelay);
   stopCar();
@@ -106,8 +106,8 @@ void stopCar() {
   digitalWrite(dir_a, HIGH); 
   digitalWrite(dir_b, HIGH);  
   
-  analogWrite(pwm_a, 200);  
-  analogWrite(pwm_b, 200);
+  analogWrite(pwm_a, 100);  
+  analogWrite(pwm_b, 100);
 
   delay(15);
   analogWrite(pwm_a, 0);  
@@ -118,8 +118,8 @@ void stopCarLeft() {
   digitalWrite(dir_a, LOW); 
   digitalWrite(dir_b, HIGH);  
   
-  analogWrite(pwm_a, 200);  
-  analogWrite(pwm_b, 200);
+  analogWrite(pwm_a, 40);  
+  analogWrite(pwm_b, 40);
 
   delay(15);
 
@@ -131,8 +131,8 @@ void stopCarRight() {
   digitalWrite(dir_a, HIGH); 
   digitalWrite(dir_b, LOW);  
   
-  analogWrite(pwm_a, 200);  
-  analogWrite(pwm_b, 200);
+  analogWrite(pwm_a, 40);  
+  analogWrite(pwm_b, 40);
 
   delay(15);
 
@@ -144,8 +144,8 @@ void eStop() {
   digitalWrite(dir_a, HIGH); 
   digitalWrite(dir_b, HIGH);  
   
-  analogWrite(pwm_a, 200);  
-  analogWrite(pwm_b, 200);
+  analogWrite(pwm_a, 100);  
+  analogWrite(pwm_b, 100);
 
   delay(15);
 
