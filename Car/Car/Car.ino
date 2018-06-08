@@ -1,15 +1,15 @@
-#define trigPin 12
-#define echoPin 13
+#include <NewPing.h>
 
-#define trigPin2 10
-#define echoPin2 11
+#define SONAR_NUM 3      // Number of sensors.
+#define MAX_DISTANCE 70 // Maximum distance (in cm) to ping.
 
-#define trigPin3 8
-#define echoPin3 7
+NewPing sonar[SONAR_NUM] = {   // Sensor object array.
+  NewPing(4, 5, MAX_DISTANCE), // Each sensor's trigger pin, echo pin, and max distance to ping. 
+  NewPing(6, 7, MAX_DISTANCE), 
+  NewPing(10, 11, MAX_DISTANCE)
+};
 
-long duration, distance;
-long duration2, distance2;
-long duration3, distance3;
+long distance[3] = {0, 0, 0};
 
 int pwm_a = 3;  //PWM control for motor outputs 1 and 2
 int pwm_b = 9;  //PWM control for motor outputs 3 and 4
@@ -31,54 +31,48 @@ void setup() {
 
   analogWrite(pwm_a, 100);  //set both motors to run at (100/255 = 39)% duty cycle (slow)
   analogWrite(pwm_b, 100);
-
-  pinMode(trigPin, OUTPUT);
-  pinMode(echoPin, INPUT);
-  pinMode(trigPin2, OUTPUT);
-  pinMode(echoPin2, INPUT);
-  pinMode(trigPin3, OUTPUT);
-  pinMode(echoPin3, INPUT);
 }
 
 void loop() {
   checkSensors();
-  if (distance > 15) {
+  Serial.println(distance[0]);
+  if (distance[0] > 20) {
     driveForward(1);
     checkSensors();
-    Serial.println(distance);
+    //Serial.println(distance[0]);
   }
 
-  if (distance < 15) {
+  if (distance[0] < 20) {
     eStop();
-    if (distance2 > distance3) {
-      if (distance < 15) {
+    if (distance[1] > distance[2]) {
+      if (distance[0] < 20) {
         turnRight(5);
         checkSensors();
-        Serial.println(distance);
+        Serial.println("1oooooooooooooooooooooooooo");
 
       }
-    } else if (distance2 < distance3) {
-      if (distance < 15) {
+    } else if (distance[1] < distance[2]) {
+      if (distance[0] < 20) {
         turnLeft(5);
         checkSensors();
-        Serial.println(distance);
+        Serial.println("roooooooooooooooooooo");
 
       }
     } else {
       int randInt = random(0, 2);
       switch (randInt) {
         case 0:
-          while (distance < 20) {
+          while (distance[0] < 20) {
             turnLeft(15);
-            Serial.println(distance);
+            //Serial.println(distance[0]);
             Serial.println("Case 0");
             checkSensors();
           }
           break;
         case 1:
-          while (distance < 20) {
+          while (distance[0] < 20) {
             turnRight(15);
-            Serial.println(distance);
+            //Serial.println(distance[0]);
             Serial.println("Case 1");
             checkSensors();
           }
@@ -97,8 +91,8 @@ void turnLeft(int turnTime) {
   digitalWrite(dir_a, HIGH);
   digitalWrite(dir_b, LOW);
 
-  analogWrite(pwm_a, 70);
-  analogWrite(pwm_b, 70);
+  analogWrite(pwm_a, 90);
+  analogWrite(pwm_b, 90);
 
   delay(turnTime);
   //stopCarLeft();
@@ -108,8 +102,8 @@ void turnRight(int turnTime) {
   digitalWrite(dir_a, LOW);
   digitalWrite(dir_b, HIGH);
 
-  analogWrite(pwm_a, 70);
-  analogWrite(pwm_b, 70);
+  analogWrite(pwm_a, 90);
+  analogWrite(pwm_b, 90);
 
   delay(turnTime);
   //stopCarRight();
@@ -201,52 +195,14 @@ void eStop() {
 }
 
 void checkSensors() {
-  digitalWrite(trigPin, LOW);
-  delayMicroseconds(2);
-
-  digitalWrite(trigPin, HIGH);
-  delayMicroseconds(10);
-
-  digitalWrite(trigPin, LOW);
-
-  duration = pulseIn(echoPin, HIGH);
-  if (duration > 5820) {
-    duration = 5820;
+for (uint8_t i = 0; i < SONAR_NUM; i++) { // Loop through each sensor and display results.
+    delay(29); // Wait 50ms between pings (about 20 pings/sec). 29ms should be the shortest delay between pings.
+    Serial.print(i);
+    Serial.print("=");
+    Serial.print(distance[i]);
+    Serial.print("cm ");
+    distance[i] = sonar[i].ping_cm();
   }
-  distance = (duration / 2) / 29.1;
-
-  /*//-----------------------------------------------------
-    //Sensor 2
-
-    digitalWrite(trigPin2, LOW);
-    delayMicroseconds(2);
-
-    digitalWrite(trigPin2, HIGH);
-    delayMicroseconds(10);
-
-    digitalWrite(trigPin2, LOW);
-
-    duration2 = pulseIn(echoPin2, HIGH);
-    if (duration2 > 5820) {
-    duration2 = 5820;
-    }
-    distance2 = (duration2 / 2) / 29.1;
-
-    //-----------------------------------------------------
-    //Sensor 3
-
-    digitalWrite(trigPin3, LOW);
-    delayMicroseconds(2);
-
-    digitalWrite(trigPin3, HIGH);
-    delayMicroseconds(10);
-
-    digitalWrite(trigPin3, LOW);
-
-    duration3 = pulseIn(echoPin3, HIGH);
-    if (duration3 > 5820) {
-    duration3 = 5820;
-    }
-    distance3 = (duration3 / 2) / 29.1;*/
+  Serial.println();
 }
 
