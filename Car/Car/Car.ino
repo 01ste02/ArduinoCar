@@ -22,7 +22,7 @@ int rotateDelay = 2 * rightDelay;
 
 
 void setup() {
-  //Serial.begin(9600);
+  Serial.begin(9600);
 
   pinMode(pwm_a, OUTPUT);  //Set control pins to be outputs
   pinMode(pwm_b, OUTPUT);
@@ -42,54 +42,77 @@ void setup() {
 
 void loop() {
   checkSensors();
-  while (distance > 20) {
+  if (distance > 15) {
     driveForward(1);
     checkSensors();
+    Serial.println(distance);
   }
 
-  if (distance < 21) {
+  if (distance < 15) {
     eStop();
     if (distance2 > distance3) {
-      turnRight();
+      if (distance < 15) {
+        turnRight(5);
+        checkSensors();
+        Serial.println(distance);
+
+      }
     } else if (distance2 < distance3) {
-      turnLeft();
+      if (distance < 15) {
+        turnLeft(5);
+        checkSensors();
+        Serial.println(distance);
+
+      }
     } else {
       int randInt = random(0, 2);
       switch (randInt) {
         case 0:
-          turnLeft();
+          while (distance < 20) {
+            turnLeft(15);
+            Serial.println(distance);
+            Serial.println("Case 0");
+            checkSensors();
+          }
           break;
         case 1:
-          turnRight();
+          while (distance < 20) {
+            turnRight(15);
+            Serial.println(distance);
+            Serial.println("Case 1");
+            checkSensors();
+          }
           break;
         case 2:
-          turnAround();
+          //turnAround();
+          //Serial.println(distance);
+
           break;
       }
     }
   }
 }
 
-void turnLeft() {
+void turnLeft(int turnTime) {
   digitalWrite(dir_a, HIGH);
   digitalWrite(dir_b, LOW);
 
-  analogWrite(pwm_a, 100);
-  analogWrite(pwm_b, 100);
+  analogWrite(pwm_a, 70);
+  analogWrite(pwm_b, 70);
 
-  delay(leftDelay);
-  stopCarLeft();
+  delay(turnTime);
+  //stopCarLeft();
 }
 
-void turnRight() {
+void turnRight(int turnTime) {
   digitalWrite(dir_a, LOW);
   digitalWrite(dir_b, HIGH);
 
-  analogWrite(pwm_a, 100);
-  analogWrite(pwm_b, 100);
+  analogWrite(pwm_a, 70);
+  analogWrite(pwm_b, 70);
 
-  delay(rightDelay);
-  stopCarRight();
+  delay(turnTime);
+  //stopCarRight();
 }
 
 void driveForward(int duration) {
@@ -192,38 +215,38 @@ void checkSensors() {
   }
   distance = (duration / 2) / 29.1;
 
-  //-----------------------------------------------------
-  //Sensor 2
+  /*//-----------------------------------------------------
+    //Sensor 2
 
-  digitalWrite(trigPin2, LOW);
-  delayMicroseconds(2);
+    digitalWrite(trigPin2, LOW);
+    delayMicroseconds(2);
 
-  digitalWrite(trigPin2, HIGH);
-  delayMicroseconds(10);
+    digitalWrite(trigPin2, HIGH);
+    delayMicroseconds(10);
 
-  digitalWrite(trigPin2, LOW);
+    digitalWrite(trigPin2, LOW);
 
-  duration2 = pulseIn(echoPin2, HIGH);
-  if (duration2 > 5820) {
+    duration2 = pulseIn(echoPin2, HIGH);
+    if (duration2 > 5820) {
     duration2 = 5820;
-  }
-  distance2 = (duration2 / 2) / 29.1;
+    }
+    distance2 = (duration2 / 2) / 29.1;
 
-  //-----------------------------------------------------
-  //Sensor 3
+    //-----------------------------------------------------
+    //Sensor 3
 
-  digitalWrite(trigPin3, LOW);
-  delayMicroseconds(2);
+    digitalWrite(trigPin3, LOW);
+    delayMicroseconds(2);
 
-  digitalWrite(trigPin3, HIGH);
-  delayMicroseconds(10);
+    digitalWrite(trigPin3, HIGH);
+    delayMicroseconds(10);
 
-  digitalWrite(trigPin3, LOW);
+    digitalWrite(trigPin3, LOW);
 
-  duration3 = pulseIn(echoPin3, HIGH);
-  if (duration3 > 5820) {
+    duration3 = pulseIn(echoPin3, HIGH);
+    if (duration3 > 5820) {
     duration3 = 5820;
-  }
-  distance3 = (duration3 / 2) / 29.1;
+    }
+    distance3 = (duration3 / 2) / 29.1;*/
 }
 
