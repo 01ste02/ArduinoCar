@@ -20,6 +20,12 @@ int leftDelay = 415;
 int rightDelay = 415;
 int rotateDelay = 2 * rightDelay;
 
+int leftButton = A0;
+int rightButton = A1;
+
+int buttonStateL = 0;
+int buttonStateR = 0;
+
 
 void setup() {
   Serial.begin(9600);
@@ -31,59 +37,41 @@ void setup() {
 
   analogWrite(pwm_a, 100);  //set both motors to run at (100/255 = 39)% duty cycle (slow)
   analogWrite(pwm_b, 100);
+
+  pinMode(leftButton, INPUT);
+  pinMode(rightButton, INPUT);
 }
 
 void loop() {
   checkSensors();
   Serial.println(distance[0]);
+  
+  if ((buttonStateL == LOW) && (buttonStateR == LOW)) {
   if (distance[0] > 20) {
     driveForward(1);
-    checkSensors();
     //Serial.println(distance[0]);
   }
-
+  checkSensors();
+  
   if (distance[0] < 20) {
     eStop();
     if (distance[1] > distance[2]) {
       if (distance[0] < 20) {
-        turnRight(5);
         checkSensors();
-        Serial.println("1oooooooooooooooooooooooooo");
-
+        turnLeft(5);
       }
     } else if (distance[1] < distance[2]) {
       if (distance[0] < 20) {
-        turnLeft(5);
         checkSensors();
-        Serial.println("roooooooooooooooooooo");
-
+        turnRight(5);
       }
     } else {
-      int randInt = random(0, 2);
-      switch (randInt) {
-        case 0:
-          while (distance[0] < 20) {
-            turnLeft(15);
-            //Serial.println(distance[0]);
-            Serial.println("Case 0");
-            checkSensors();
-          }
-          break;
-        case 1:
-          while (distance[0] < 20) {
-            turnRight(15);
-            //Serial.println(distance[0]);
-            Serial.println("Case 1");
-            checkSensors();
-          }
-          break;
-        case 2:
-          //turnAround();
-          //Serial.println(distance);
-
-          break;
-      }
     }
+  }
+  } else if (buttonStateL == HIGH) {
+      turnLeft(5);
+  } else if (buttonStateR == HIGH) {
+        turnRight(5);
   }
 }
 
@@ -204,5 +192,11 @@ for (uint8_t i = 0; i < SONAR_NUM; i++) { // Loop through each sensor and displa
     distance[i] = sonar[i].ping_cm();
   }
   Serial.println();
+
+  buttonStateL = digitalRead(leftButton);
+  buttonStateR = digitalRead(rightButton);
+
+  Serial.println(buttonStateL);
+  Serial.println(buttonStateR);
 }
 
